@@ -10,7 +10,7 @@ class IndexController extends Controller
 {
 	public function actionIndex()
 	{
-		return view('index/index');
+		return view('home/index');
 	}
 
 	public function actionIndexAdmin()

@@ -11,7 +11,8 @@ use App\Http\Controllers\WaterController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\InstitutionController;
 
-// Route::get('', [IndexController::class, 'actionIndex'])->middleware('GenericMiddleware:index/index');
+Route::get('index/home', [IndexController::class, 'actionIndex']);
+//Route::get('', [IndexController::class, 'actionIndex'])->middleware('GenericMiddleware:index/index');
 Route::get('', [WaterController::class, 'actionInsert'])->middleware('GenericMiddleware:water/insert');
 
 Route::get('index/indexadmin/{year?}/{month?}', [IndexController::class, 'actionIndexAdmin'])->middleware('GenericMiddleware:index/indexadmin');
