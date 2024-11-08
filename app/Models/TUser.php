@@ -23,5 +23,15 @@ class TUser extends Model
 	{
 		return $this->hasMany(TInstitutionTUser::class, 'idUser');
 	}
+
+	public function tProvince()
+	{
+		return $this->belongsTo(TProvince::class, 'idProvince');
+	}
+
+	public function tDistrict()
+	{
+		return $this->belongsTo(TDistrict::class, 'idDistrict');
+	}
 }
 ?>

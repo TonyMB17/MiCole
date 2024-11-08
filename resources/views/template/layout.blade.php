@@ -8,6 +8,9 @@
 
 	<title>{{$tConfigurationFmMdl!=null ? $tConfigurationFmMdl->platformName : config('var.PLATFORM_NAME')}}</title>
 
+	<!-- Favicon -->
+    <link href="{{ asset('home/img/logo_agua_segura.png') }}" rel="icon">
+
 	<link rel="stylesheet" href="{{asset('plugin/adminlte/bower_components/bootstrap/dist/css/bootstrap.min.css')}}">
 	<link rel="stylesheet" href="{{asset('plugin/adminlte/bower_components/font-awesome/css/font-awesome.min.css')}}">
 	<link rel="stylesheet" href="{{asset('plugin/adminlte/bower_components/Ionicons/css/ionicons.min.css')}}">
@@ -118,7 +121,7 @@
 			<div class="pull-right hidden-xs">
 				<b>Versión</b> 1.0
 			</div>
-			<b>Copyright © {{$tConfigurationFmMdl!=null ? $tConfigurationFmMdl->footerYear : '2024'}}-{{date('Y')}} <a href="{{$tConfigurationFmMdl!=null ? $tConfigurationFmMdl->footerUrl : 'https://eirl.codideep.com'}}" target="_blank">{{$tConfigurationFmMdl!=null ? $tConfigurationFmMdl->footerText : 'Codideep\'s developer'}}</a></b>. Todo los derechos reservados.
+			<b>Copyright © {{$tConfigurationFmMdl!=null ? $tConfigurationFmMdl->footerYear : '2024'}}-{{date('Y')}} <a href="{{$tConfigurationFmMdl!=null ? $tConfigurationFmMdl->footerUrl : '#'}}" target="_blank">{{$tConfigurationFmMdl!=null ? $tConfigurationFmMdl->footerText : 'Codideep\'s developer'}}</a></b>. Todo los derechos reservados.
 		</footer>
 		@include('template/parcial/layout/sidebar')
 	</div>

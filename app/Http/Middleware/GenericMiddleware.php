@@ -61,6 +61,7 @@ class GenericMiddleware
 
 		$allowUrl=
 		[
+			['Público', 'index/home', 'mHome', null],
 			['Público', 'index/index', 'mHome', null],
 			['Normal', 'index/indexadmin', 'mControlPanel', 'miHome'],
 
@@ -99,8 +100,8 @@ class GenericMiddleware
 			['Súper usuario,Administrador', 'exception/changestatus', null, null],
 
 			['Normal', 'water/insert', 'mWater', null],
-			['Súper usuario,Administrador', 'water/getall', 'mWaterModule', 'miWaterModuleGetAll'],
-			['Súper usuario,Administrador', 'water/export', null, null],
+			['Súper usuario,Administrador,Supervisor', 'water/getall', 'mWaterModule', 'miWaterModuleGetAll'],
+			['Súper usuario,Administrador,Supervisor', 'water/export', null, null],
 
 			['Normal', 'district/chgtoinsertwater', null, null],
 

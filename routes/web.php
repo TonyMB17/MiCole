@@ -11,9 +11,27 @@ use App\Http\Controllers\WaterController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\InstitutionController;
 
-Route::get('index/home', [IndexController::class, 'actionIndex']);
+// Redirigir la ruta raíz a 'index/home'
+Route::get('/', function () {
+    return redirect()->route('home.index'); // Redirige a la ruta nombrada 'home.index'
+})->name('home');
+
+Route::get('index/home', [IndexController::class, 'actionIndex'])->name('home.index');
+
+Route::get('index/home/about', function () {
+    return view('home/about');
+})->name('home.about');
+
+Route::get('index/home/content', [IndexController::class, 'actionContent'])->name('home.content');
+
+Route::get('index/home/content_detail/{id}', [IndexController::class, 'actioncontentDetail'])->name('home.content_detail');
+
+Route::get('index/home/gallery', [IndexController::class, 'actionGallery'])->name('home.gallery');
+
+Route::get('/get-districts', [UserController::class, 'getDistrictsByProvince'])->name('getDistricts');
+
 //Route::get('', [IndexController::class, 'actionIndex'])->middleware('GenericMiddleware:index/index');
-Route::get('', [WaterController::class, 'actionInsert'])->middleware('GenericMiddleware:water/insert');
+Route::get('water/insert', [WaterController::class, 'actionInsert'])->middleware('GenericMiddleware:water/insert');
 
 Route::get('index/indexadmin/{year?}/{month?}', [IndexController::class, 'actionIndexAdmin'])->middleware('GenericMiddleware:index/indexadmin');
 Route::post('index/indexadmin', [IndexController::class, 'actionIndexAdmin'])->middleware('GenericMiddleware:index/indexadmin');

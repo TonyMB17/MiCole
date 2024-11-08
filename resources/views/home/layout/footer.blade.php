@@ -1,12 +1,15 @@
    <!-- Footer Start -->
    <div class="container-fluid bg-secondary text-white mt-5 py-5 px-sm-3 px-md-5">
         <div class="row pt-5">
-            <div class="col-lg-3 col-md-6 mb-5">
-                <a href="" class="navbar-brand font-weight-bold text-primary m-0 mb-4 p-0" style="font-size: 40px; line-height: 40px;">
-                    <i class="flaticon-043-teddy-bear"></i>
-                    <span class="text-white">KidKinder</span>
+            <div class="col-lg-6 col-md-6 mb-5">
+                <a href="{{ route('home.index') }}" class="navbar-brand font-weight-bold text-primary m-0 mb-4 p-0" style="font-size: 40px; line-height: 40px;">
+                    <i class="fas fa-water"></i>
+                    <span class="text-white">MiCole</span>
                 </a>
-                <p>Labore dolor amet ipsum ea, erat sit ipsum duo eos. Volup amet ea dolor et magna dolor, elitr rebum duo est sed diam elitr. Stet elitr stet diam duo eos rebum ipsum diam ipsum elitr.</p>
+                <h4 style="color: white">Sistema Regional de Registro de Cloro</h4>
+                <p>Este es un espacio donde los estudiantes pueden aprender a medir el cloro en el agua de sus escuelas. Con este sistema, 
+                    podrás hacer tus propias verificaciones y descubrir información divertida y útil sobre el agua. ¡Conviértete en un experto y cuida de tu entorno 
+                    mientras te diviertes!</p>
                 <div class="d-flex justify-content-start mt-4">
                     <a class="btn btn-outline-primary rounded-circle text-center mr-2 px-0"
                         style="width: 38px; height: 38px;" href="#"><i class="fab fa-twitter"></i></a>
@@ -19,61 +22,44 @@
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 mb-5">
-                <h3 class="text-primary mb-4">Get In Touch</h3>
+                <h3 class="text-primary mb-4">Ubícanos</h3>
                 <div class="d-flex">
                     <h4 class="fa fa-map-marker-alt text-primary"></h4>
                     <div class="pl-3">
-                        <h5 class="text-white">Address</h5>
-                        <p>123 Street, New York, USA</p>
+                        <h5 class="text-white">Direccíon</h5>
+                        <p>Jr. Puno N° 107, Abancay – Apurimac</p>
                     </div>
                 </div>
                 <div class="d-flex">
                     <h4 class="fa fa-envelope text-primary"></h4>
                     <div class="pl-3">
-                        <h5 class="text-white">Email</h5>
+                        <h5 class="text-white">Correo Electronico</h5>
                         <p>info@example.com</p>
                     </div>
                 </div>
                 <div class="d-flex">
                     <h4 class="fa fa-phone-alt text-primary"></h4>
                     <div class="pl-3">
-                        <h5 class="text-white">Phone</h5>
+                        <h5 class="text-white">Telefono</h5>
                         <p>+012 345 67890</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 mb-5">
-                <h3 class="text-primary mb-4">Quick Links</h3>
+                <h3 class="text-primary mb-4">Links</h3>
                 <div class="d-flex flex-column justify-content-start">
-                    <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
-                    <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>About Us</a>
-                    <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Classes</a>
-                    <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Teachers</a>
-                    <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Blog</a>
-                    <a class="text-white" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+                    <a class="text-white mb-2" href="{{ route('home.index') }}"><i class="fa fa-angle-right mr-2"></i>Inicio</a>
+                    <a class="text-white mb-2" href="{{ route('home.about') }}"><i class="fa fa-angle-right mr-2"></i>Acerca de Nosotros</a>
+                    <a class="text-white mb-2" href="{{ route('home.content') }}"><i class="fa fa-angle-right mr-2"></i>Contenido</a>
+                    <a class="text-white" href="{{ route('home.gallery') }}"><i class="fa fa-angle-right mr-2"></i>Galeria</a>
                 </div>
-            </div>
-            <div class="col-lg-3 col-md-6 mb-5">
-                <h3 class="text-primary mb-4">Newsletter</h3>
-                <form action="">
-                    <div class="form-group">
-                        <input type="text" class="form-control border-0 py-4" placeholder="Your Name" required="required" />
-                    </div>
-                    <div class="form-group">
-                        <input type="email" class="form-control border-0 py-4" placeholder="Your Email"
-                            required="required" />
-                    </div>
-                    <div>
-                        <button class="btn btn-primary btn-block border-0 py-3" type="submit">Submit Now</button>
-                    </div>
-                </form>
             </div>
         </div>
         <div class="container-fluid pt-5" style="border-top: 1px solid rgba(23, 162, 184, .2);;">
             <p class="m-0 text-center text-white">
-                &copy; <a class="text-primary font-weight-bold" href="#">Your Site Name</a>. All Rights Reserved. Designed
+                &copy; <a class="text-primary font-weight-bold" href="#">Gobierno Regional de Apurímac 2024</a>. Todos los derechos reservados. Designed
                 by
-                <a class="text-primary font-weight-bold" href="https://htmlcodex.com">HTML Codex</a>
+                <a class="text-primary font-weight-bold" href="">Desarrollo Social</a>
             </p>
         </div>
     </div>
@@ -87,7 +73,7 @@
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
+    <script src="{{asset('home/lib/easing/easing.min.js')}}"></script>
     <script src="{{asset('home/lib/owlcarousel/owl.carousel.min.js')}}"></script>
     <script src="{{asset('home/lib/isotope/isotope.pkgd.min.js')}}"></script>
     <script src="{{asset('home/lib/lightbox/js/lightbox.min.js')}}"></script>

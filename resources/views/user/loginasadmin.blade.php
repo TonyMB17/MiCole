@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
 	<title>System</title>
+	
+	<!-- Favicon -->
+    <link href="{{ asset('home/img/logo_agua_segura.png') }}" rel="icon">
+
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="{{url('plugin/logintemplate/vendor/bootstrap/css/bootstrap.min.css')}}">

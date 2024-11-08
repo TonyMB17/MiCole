@@ -7,6 +7,9 @@
 	<meta name="robots" content="noindex">
 
 	<title>{{$tConfigurationFmMdl!=null ? $tConfigurationFmMdl->platformName : config('var.PLATFORM_NAME')}}</title>
+
+	<!-- Favicon -->
+    <link href="{{ asset('home/img/logo_agua_segura.png') }}" rel="icon">
 	
 	<link rel="stylesheet" href="{{asset('plugin/adminlte/bower_components/bootstrap/dist/css/bootstrap.min.css')}}">
 	<link rel="stylesheet" href="{{asset('plugin/adminlte/bower_components/font-awesome/css/font-awesome.min.css')}}">

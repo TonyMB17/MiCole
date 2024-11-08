@@ -44,5 +44,8 @@
     "load-grunt-tasks": "^3.5.2",
     "phantomjs-prebuilt": "~2.1.8",
     "time-grunt": "^1.4.0"
+  },
+  "dependencies": {
+    "bootstrap-datepicker": "file:"
   }
 }
