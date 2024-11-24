@@ -79,7 +79,7 @@ class UserController extends Controller
 					if ($tUser->role == 'Normal') {
 						return PlatformHelper::redirectCorrect(['Bienvenido a la plataforma, ' . $tUser->firstName . '.'], 'water/insert');
 					} elseif ($tUser->role == 'Supervisor') {
-						return PlatformHelper::redirectCorrect(['Bienvenido a la plataforma, ' . $tUser->firstName . '.'], 'water/getall/1'); // Redirige a la misma vista, pero con restricciones
+						return PlatformHelper::redirectCorrect(['Bienvenido a la plataforma, ' . $tUser->firstName . '.'], 'water/getall'); // Redirige a la misma vista, pero con restricciones
 					} else {
 						return PlatformHelper::redirectCorrect(['Bienvenido a la plataforma, ' . $tUser->firstName . '.'], 'index/indexadmin');
 					}

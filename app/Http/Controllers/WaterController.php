@@ -9,14 +9,15 @@ use Illuminate\Session\SessionManager;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Export\DataExport;
-
+use App\Models\TInstitution;
 use App\Validation\WaterValidation;
 
 use Illuminate\Support\Facades\DB;
 
-use App\Models\TProvince;
+use App\Models\TImage;
 use App\Models\TWater;
 use App\Models\TUser;
+use DateTime;
 
 class WaterController extends Controller
 {
@@ -122,6 +123,39 @@ class WaterController extends Controller
 
 				$tWater->save();
 
+				$images = $request->file('images');
+				$imagePaths = [];
+
+				if ($images) {
+					foreach ($images as $key => $image) {
+						if ($key < 3) { // Máximo 3 imágenes
+							// Genera un nombre único para la imagen
+							$filename = uniqid() . '.' . $image->getClientOriginalExtension();
+
+							// Define la ruta completa para guardar la imagen
+							$path = public_path('img/water/' . $filename);
+
+							// Mueve la imagen a la carpeta especificada
+							$image->move(public_path('img/water'), $filename);
+
+							// Almacena la ruta relativa de la imagen
+							$imagePaths[] = 'img/water/' . $filename;
+						}
+					}
+				}
+
+				// Guardar en tImages
+				$tImage = new TImage();
+				$tImage->idImage = uniqid();
+				$tImage->idWater = $tWater->idWater;
+				$tImage->type = 'medicion';
+				$tImage->urlImage1 = $imagePaths[0] ?? null;
+				$tImage->urlImage2 = $imagePaths[1] ?? null;
+				$tImage->urlImage3 = $imagePaths[2] ?? null;
+				$tImage->created_at = now();
+				$tImage->updated_at = now();
+				$tImage->save();
+
 				DB::commit();
 
 				return PlatformHelper::redirectCorrect(['Operación ralizada correctamente.'], 'water/insert');
@@ -218,66 +252,8 @@ class WaterController extends Controller
 		);
 	}
 
-	// public function actionGetAll(Request $request, $currentPage)
-	// {
-	// 	$searchParameter=$request->has('searchParameter') ? $request->input('searchParameter') : '';
-
-	// 	$paginate=PlatformHelper::preparePaginate(TWater::with(['tinstitution.tdistrict.tprovince'])->whereHas('tinstitution', function($sq1) use($searchParameter)
-	// 	{
-	// 		$sq1->whereRaw('compareFind(name, ?, 77)=1', [$searchParameter]);
-	// 	})->orWhereRaw('compareFind(month, ?, 77)=1', [$searchParameter])->orderByRaw('created_at desc'), 7, $currentPage);
-
-	// 	foreach($paginate['listRow'] as $value)
-	// 	{
-	// 		$sumForAverage=0;
-	// 		$divForAverage=0;
-
-	// 		if($value->resultW1!=-1)
-	// 		{
-	// 			$sumForAverage+=$value->resultW1;
-	// 			$divForAverage++;
-	// 		}
-
-	// 		if($value->resultW2!=-1)
-	// 		{
-	// 			$sumForAverage+=$value->resultW2;
-	// 			$divForAverage++;
-	// 		}
-
-	// 		if($value->resultW3!=-1)
-	// 		{
-	// 			$sumForAverage+=$value->resultW3;
-	// 			$divForAverage++;
-	// 		}
-
-	// 		if($value->resultW4!=-1)
-	// 		{
-	// 			$sumForAverage+=$value->resultW4;
-	// 			$divForAverage++;
-	// 		}
-
-	// 		if($value->resultW5!=-1)
-	// 		{
-	// 			$sumForAverage+=$value->resultW5;
-	// 			$divForAverage++;
-	// 		}
-
-	// 		$value->average=$divForAverage=0 ? 0 : number_format($sumForAverage/$divForAverage, 4, '.');
-	// 	}
-
-	// 	return view('water/getall',
-	// 	[
-	// 		'listTWater' => $paginate['listRow'],
-	// 		'currentPage' => $paginate['currentPage'],
-	// 		'quantityPage' => $paginate['quantityPage'],
-	// 		'searchParameter' => $searchParameter
-	// 	]);
-	// }
-
-	public function actionGetAll(Request $request, $currentPage)
+	public function actionGetAll(Request $request)
 	{
-		$searchParameter = $request->has('searchParameter') ? $request->input('searchParameter') : '';
-
 		// Obtener el rol y la provincia del usuario
 		$tUser = TUser::find(Session::get('idUser'));
 		$userRole = $tUser->role;
@@ -285,85 +261,92 @@ class WaterController extends Controller
 		$userProvince = $tUser->idProvince;
 		$userDistrict = $tUser->idDistrict;
 
-		//dd(Session::all());
-
-		// Iniciar la consulta
-		$query = TWater::with(['tinstitution.tdistrict.tprovince'])
-			->whereHas('tinstitution', function ($sq1) use ($searchParameter) {
-				$sq1->whereRaw('compareFind(name, ?, 77) = 1', [$searchParameter]);
-			})
-			->orWhereRaw('compareFind(month, ?, 77) = 1', [$searchParameter]);
+		$query = TWater::select([
+			'tinstitution.idInstitution as id',
+			'tinstitution.name as nombre',
+			'tinstitution.lender as prestador',
+			'tdistrict.name as distrito',
+			'tprovince.name as provincia',
+			'twater.month as mes',
+			'twater.resultW1',
+			'twater.resultW2',
+			'twater.resultW3',
+			'twater.resultW4',
+			'twater.resultW5',
+			'twater.created_at'
+		])
+			->join('tinstitution', 'twater.idInstitution', '=', 'tinstitution.idInstitution')
+			->join('tdistrict', 'tinstitution.idDistrict', '=', 'tdistrict.idDistrict')
+			->join('tprovince', 'tdistrict.idProvince', '=', 'tprovince.idProvince')
+			->whereRaw('twater.updated_at = (
+			SELECT MAX(sub_w.updated_at)
+			FROM twater as sub_w
+			WHERE sub_w.idInstitution = twater.idInstitution
+		)')
+			->get();
 
 		// Si el usuario es Supervisor, filtrar por su provincia
 		if ($userRole === 'Supervisor' && $userLevel === 'levelProvince') {
-			$query = TWater::with(['tInstitution.tdistrict.tprovince'])  // Relación con institución, distrito y provincia
-				->where(function ($q) use ($searchParameter) {
-					$q->whereHas('tInstitution', function ($sq1) use ($searchParameter) {
-						$sq1->whereRaw('compareFind(name, ?, 77) = 1', [$searchParameter]);
-					})
-						->orWhereRaw('compareFind(month, ?, 77) = 1', [$searchParameter]);
-				})
-				->whereHas('tInstitution.tdistrict.tprovince', function ($sq2) use ($userProvince) {
-					$sq2->where('idProvince', $userProvince);  // Filtramos por la provincia del usuario
-				});
+			$query = TWater::select([
+				'tinstitution.idInstitution as id',
+				'tinstitution.name as nombre',
+				'tinstitution.lender as prestador',
+				'tdistrict.name as distrito',
+				'tprovince.name as provincia',
+				'twater.month as mes',
+				'twater.resultW1',
+				'twater.resultW2',
+				'twater.resultW3',
+				'twater.resultW4',
+				'twater.resultW5',
+				'twater.created_at'
+			])
+				->join('tinstitution', 'twater.idInstitution', '=', 'tinstitution.idInstitution')
+				->join('tdistrict', 'tinstitution.idDistrict', '=', 'tdistrict.idDistrict')
+				->join('tprovince', 'tdistrict.idProvince', '=', 'tprovince.idProvince')
+				->where('tprovince.idProvince', '=', $userProvince) // Filtro por provincia
+				->whereRaw('twater.updated_at = (
+				SELECT MAX(sub_w.updated_at)
+				FROM twater as sub_w
+				WHERE sub_w.idInstitution = twater.idInstitution
+			)')
+				->get();
 		}
 
 		// Si el usuario es Supervisor, filtrar por su distrito
 		if ($userRole === 'Supervisor' && $userLevel === 'levelDistrit') {
-			$query = TWater::with(['tInstitution.tdistrict.tprovince'])  // Relación con institución, distrito y provincia
-				->where(function ($q) use ($searchParameter) {
-					$q->whereHas('tInstitution', function ($sq1) use ($searchParameter) {
-						$sq1->whereRaw('compareFind(name, ?, 77) = 1', [$searchParameter]);
-					})
-						->orWhereRaw('compareFind(month, ?, 77) = 1', [$searchParameter]);
-				})
-				->whereHas('tInstitution.tdistrict.tprovince', function ($sq2) use ($userDistrict) {
-					$sq2->where('idDistrict', $userDistrict);  // Filtramos por la distrito del usuario
-				});
+			$query = TWater::select([
+				'tinstitution.idInstitution as id',
+				'tinstitution.name as nombre',
+				'tinstitution.lender as prestador',
+				'tdistrict.name as distrito',
+				'tprovince.name as provincia',
+				'twater.month as mes',
+				'twater.resultW1',
+				'twater.resultW2',
+				'twater.resultW3',
+				'twater.resultW4',
+				'twater.resultW5',
+				'twater.created_at'
+			])
+				->join('tinstitution', 'twater.idInstitution', '=', 'tinstitution.idInstitution')
+				->join('tdistrict', 'tinstitution.idDistrict', '=', 'tdistrict.idDistrict')
+				->join('tprovince', 'tdistrict.idProvince', '=', 'tprovince.idProvince')
+				->where('tdistrict.idDistrict', '=', $userDistrict) // Filtro por Distrito
+				->whereRaw('twater.updated_at = (
+				SELECT MAX(sub_w.updated_at)
+				FROM twater as sub_w
+				WHERE sub_w.idInstitution = twater.idInstitution
+			)')
+				->get();
 		}
 
-		$paginate = PlatformHelper::preparePaginate($query->orderByRaw('created_at desc'), 7, $currentPage);
-
-		foreach ($paginate['listRow'] as $value) {
-			$sumForAverage = 0;
-			$divForAverage = 0;
-
-			if ($value->resultW1 != -1) {
-				$sumForAverage += $value->resultW1;
-				$divForAverage++;
-			}
-
-			if ($value->resultW2 != -1) {
-				$sumForAverage += $value->resultW2;
-				$divForAverage++;
-			}
-
-			if ($value->resultW3 != -1) {
-				$sumForAverage += $value->resultW3;
-				$divForAverage++;
-			}
-
-			if ($value->resultW4 != -1) {
-				$sumForAverage += $value->resultW4;
-				$divForAverage++;
-			}
-
-			if ($value->resultW5 != -1) {
-				$sumForAverage += $value->resultW5;
-				$divForAverage++;
-			}
-
-			$value->average = $divForAverage == 0 ? 0 : number_format($sumForAverage / $divForAverage, 4, '.');
-		}
+		//dd($query);
 
 		return view('water/getall', [
-			'listTWater' => $paginate['listRow'],
-			'currentPage' => $paginate['currentPage'],
-			'quantityPage' => $paginate['quantityPage'],
-			'searchParameter' => $searchParameter
+			'listTWater' => $query
 		]);
 	}
-
 
 	// public function actionExport(Request $request)
 	// {
@@ -507,14 +490,14 @@ class WaterController extends Controller
 			// Calcular el promedio
 			for ($i = 1; $i <= 5; $i++) {
 				$result = "resultW$i";
-				if ($value->$result != -1) {
-					$sumForAverage += $value->$result;
+				if ($value->$result > -1) {
+					$sumForAverage = $value->$result;
 					$divForAverage++;
 				}
 			}
 
 			// Calcular el promedio correctamente
-			$value->average = $divForAverage == 0 ? 0 : number_format($sumForAverage / $divForAverage, 4, '.');
+			$value->average = $sumForAverage;
 		}
 
 		// Preparar los datos para la exportación
@@ -531,7 +514,7 @@ class WaterController extends Controller
 			'MCR S. 3',
 			'MCR S. 4',
 			'MCR S. 5',
-			'Promedio',
+			'Ultima Medicion',
 			'Estado'
 		];
 
@@ -555,5 +538,141 @@ class WaterController extends Controller
 
 		// Devolver el archivo de Excel
 		return Excel::download(new DataExport($data), 'waterExport.xlsx');
+	}
+
+	public function getWaterDetail($id)
+	{
+		// Obtener el mes y año actual
+		$currentMonth = now()->format('m'); // Mes actual en formato 01-12
+		$currentYear = now()->format('Y'); // Año actual
+
+		// Filtrar los registros de los últimos 6 meses
+		$data = TWater::select([
+			'twater.month',
+			'twater.resultW1',
+			'twater.resultW2',
+			'twater.resultW3',
+			'twater.resultW4',
+			'twater.resultW5',
+			'twater.updated_at' // Asegurarse de incluir updated_at para el filtrado
+		])
+			->join('tinstitution', 'twater.idInstitution', '=', 'tinstitution.idInstitution')
+			->where('twater.idInstitution', '=', $id)
+			->whereBetween('twater.updated_at', [now()->subMonths(5)->startOfMonth(), now()->endOfMonth()])
+			->orderBy('twater.updated_at', 'ASC')
+			->get();
+
+		// Formatear los datos para Chart.js
+		$formattedData = [];
+		$months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+		// Inicializar todos los meses con valores predeterminados
+		foreach ($months as $month) {
+			$formattedData[$month] = [
+				'resultW1' => 0,
+				'resultW2' => 0,
+				'resultW3' => 0,
+				'resultW4' => 0,
+				'resultW5' => 0,
+			];
+		}
+
+		// Reemplazar los datos con los valores reales y solo mantener los últimos 6 meses
+		foreach ($data as $record) {
+			// Extraer mes y año del campo updated_at
+			$recordMonth = \Carbon\Carbon::parse($record->updated_at)->format('m'); // Mes en formato 01-12
+			$recordYear = \Carbon\Carbon::parse($record->updated_at)->format('Y'); // Año (4 dígitos)
+
+			// Verificar si el mes y año de la fecha están dentro de los últimos 6 meses
+			if (($recordYear == $currentYear && $recordMonth >= $currentMonth - 5) || $recordYear == $currentYear) {
+				$month = $months[(int)$recordMonth - 1]; // Mapeo de número de mes a nombre en español
+
+				$formattedData[$month] = [
+					'resultW1' => $record->resultW1 < 0 ? 0 : $record->resultW1,
+					'resultW2' => $record->resultW2 < 0 ? 0 : $record->resultW2,
+					'resultW3' => $record->resultW3 < 0 ? 0 : $record->resultW3,
+					'resultW4' => $record->resultW4 < 0 ? 0 : $record->resultW4,
+					'resultW5' => $record->resultW5 < 0 ? 0 : $record->resultW5,
+				];
+			}
+		}
+
+		// Filtrar solo los últimos 6 meses en chartLabels y chartData
+		$last6Months = [];
+		$chartLabels = [];
+		for ($i = 5; $i >= 0; $i--) {
+			$date = now()->subMonths($i); // Fecha correspondiente
+			$monthLabel = $date->format('F'); // Nombre del mes en inglés
+			$monthLabelSpanish = $this->getSpanishMonth($monthLabel); // Convertir al español
+			$year = $date->format('Y'); // Año correspondiente
+
+			// Concatenar el mes en español con el año
+			$formattedLabel = "{$monthLabelSpanish} {$year}";
+
+			$last6Months[$formattedLabel] = $formattedData[$monthLabelSpanish] ?? [
+				'resultW1' => 0,
+				'resultW2' => 0,
+				'resultW3' => 0,
+				'resultW4' => 0,
+				'resultW5' => 0,
+			];
+
+			$chartLabels[] = $formattedLabel;
+		}
+
+		// Preparar los datos para Chart.js
+		$chartData = [
+			'resultW1' => array_column($last6Months, 'resultW1'),
+			'resultW2' => array_column($last6Months, 'resultW2'),
+			'resultW3' => array_column($last6Months, 'resultW3'),
+			'resultW4' => array_column($last6Months, 'resultW4'),
+			'resultW5' => array_column($last6Months, 'resultW5'),
+		];
+
+		$institution = TInstitution::select(['idInstitution', 'name', 'lender'])
+			->where('idInstitution', $id)
+			->first();
+
+		$images = TImage::select([
+			'timage.urlImage1',
+			'timage.urlImage2',
+			'timage.urlImage3',
+			'timage.created_at'
+		])
+			->join('twater', 'timage.idWater', '=', 'twater.idWater')
+			->where('twater.idInstitution', '=', $id)
+			->orderBy('timage.created_at', 'DESC')
+			->get();
+
+		$formattedImages = $images->map(function ($image) {
+			$formattedDate = (new DateTime($image->created_at))->format('d F Y'); // Formato en inglés
+			$spanishMonth = $this->getSpanishMonth(date('F', strtotime($image->created_at))); // Traducción
+			$image->formatted_date = str_replace(date('F', strtotime($image->created_at)), $spanishMonth, $formattedDate);
+
+			return $image;
+		});
+		// Retornar los datos a la vista
+		return view('water.detail', compact('chartLabels', 'chartData', 'institution', 'formattedImages'));
+	}
+
+	// Función para convertir el mes en inglés a español
+	private function getSpanishMonth($month)
+	{
+		$monthTranslations = [
+			'January' => 'Enero',
+			'February' => 'Febrero',
+			'March' => 'Marzo',
+			'April' => 'Abril',
+			'May' => 'Mayo',
+			'June' => 'Junio',
+			'July' => 'Julio',
+			'August' => 'Agosto',
+			'September' => 'Setiembre',
+			'October' => 'Octubre',
+			'November' => 'Noviembre',
+			'December' => 'Diciembre',
+		];
+
+		return $monthTranslations[$month] ?? $month; // Devolver el mes en español
 	}
 }

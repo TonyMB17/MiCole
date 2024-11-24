@@ -101,6 +101,9 @@ class GenericMiddleware
 
 			['Normal', 'water/insert', 'mWater', null],
 			['Súper usuario,Administrador,Supervisor', 'water/getall', 'mWaterModule', 'miWaterModuleGetAll'],
+			//water detail
+			['Súper usuario,Administrador,Supervisor', 'water/detail', 'mWaterModule', 'miWaterModuleGetAll'],
+			
 			['Súper usuario,Administrador,Supervisor', 'water/export', null, null],
 
 			['Normal', 'district/chgtoinsertwater', null, null],

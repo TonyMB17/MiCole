@@ -37,7 +37,7 @@
 		</div>
 		<ul>
 			<li>
-				<a href="{{url('/')}}">Página principal</a>
+				<a href="{{url('/')}}"> Volver a la Página principal</a>
 			</li>
 			<!-- <li id="mHome">
 				<a href="{{url('/')}}">Inicio</a>

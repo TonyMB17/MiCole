@@ -23,7 +23,7 @@
                     <div class="mb-5">                       
                         <video id="miVideo" class="img-fluid rounded w-100 mb-4"
                             src="{{ asset( $video->route ) }}"
-                            style="box-shadow: 0 4px 60px rgba(9, 255, 0, 0.5);" controls></video>
+                            style="box-shadow: 0 30px 60px rgb(0, 0, 0);" controls></video>
 
                         <div class="text-center pb-2">
                             <p class="section-title px-5"><span class="px-2">Más</span></p>
@@ -31,7 +31,7 @@
                         </div>
 
                         <div id="pdfViewer" class="rounded w-100 mb-4"
-                            style="height: 800px; overflow-y: auto; box-shadow: 0 4px 60px rgba(0, 191, 255, 0.5);">
+                            style="height: 800px; overflow-y: auto; box-shadow: 0 30px 60px rgb(0, 0, 0);">
                         </div>
                         <div>
                             <a href="{{ asset($content->route) }}"

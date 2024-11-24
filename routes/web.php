@@ -71,8 +71,14 @@ Route::get('exception/getall', [ExceptionController::class, 'actionGetAll'])->mi
 Route::get('exception/changestatus/{idException}/{status}', [ExceptionController::class, 'actionChangeStatus'])->middleware('GenericMiddleware:exception/changestatus');
 
 Route::match(['get', 'post'], 'water/insert', [WaterController::class, 'actionInsert'])->middleware('GenericMiddleware:water/insert');
-Route::get('water/getall/{currentPage}', [WaterController::class, 'actionGetAll'])->middleware('GenericMiddleware:water/getall');
+// Route::get('water/getall/{currentPage}', [WaterController::class, 'actionGetAll'])->middleware('GenericMiddleware:water/getall');
+
+Route::get('water/getall', [WaterController::class, 'actionGetAll'])->middleware('GenericMiddleware:water/getall');
 Route::get('water/export', [WaterController::class, 'actionExport'])->middleware('GenericMiddleware:water/export');
+
+//ruta a la vista detalle
+Route::get('/twater/detail/{id}', [WaterController::class, 'getWaterDetail'])->middleware('GenericMiddleware:water/detail')->name('water.detail');
+
 
 Route::post('district/chgtoinsertwater', [DistrictController::class, 'actionChgToInsertWater'])->middleware('GenericMiddleware:district/chgtoinsertwater');
 

@@ -25,10 +25,10 @@ var areaChartData=
 	datasets: [
 		{
 			label               : 'Electronics',
-			fillColor           : '#f5f5f5',
-			strokeColor         : '#999999',
+			fillColor           : '#00BFEF77',
+			strokeColor         : '#004CEF77',
 			pointColor          : 'rgba(210, 214, 222, 1)',
-			pointStrokeColor    : '#c1c7d1',
+			pointStrokeColor    : '#02378BFF',
 			pointHighlightFill  : '#fff',
 			pointHighlightStroke: 'rgba(220,220,220,1)',
 			data                : dataGraphic.split(',')
@@ -75,21 +75,94 @@ $(function()
 	barChart.Bar(barChartData, barChartOptions);
 });
 
-function sendFrmInsertWater()
-{
-	var isValid=null;
+let selectedImages = [];
 
-	$('#frmInsertWater').data('formValidation').resetForm();
-	$('#frmInsertWater').data('formValidation').validate();
+function handleImageSelection(input) {
+	selectedImages = [];
+    const files = Array.from(input.files);
+    const maxFiles = 3;
 
-	isValid=$('#frmInsertWater').data('formValidation').isValid();
+    if (selectedImages.length + files.length > maxFiles) {
+        alert(`Solo puedes tener un máximo de ${maxFiles} imágenes.`);
+        return;
+    }
 
-	if(!isValid)
-	{
-		incorrectNote();
+    for (const file of files) {
+        if (!file.type.startsWith('image/')) {
+            alert("Solo se permiten archivos de tipo imagen.");
+            return;
+        }
+        selectedImages.push(file);
+    }
 
-		return;
-	}
+    renderImages();
+}
 
-	confirmDialogSend('frmInsertWater');
+function renderImages() {	
+    const imagePreview = document.getElementById('imagePreview');
+    imagePreview.innerHTML = '';
+
+    selectedImages.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'image-container';
+
+            imageContainer.innerHTML = `
+                <img src="${e.target.result}" alt="Imagen ${index + 1}">                
+            `;
+
+            imagePreview.appendChild(imageContainer);
+        };
+        reader.readAsDataURL(file);
+    });
+	
+}
+
+function removeImage(index) {
+    selectedImages = [];
+    renderImages();
+}
+
+function sendFrmInsertWater() {
+    let isValid = null;
+
+    $('#frmInsertWater').data('formValidation').resetForm();
+    $('#frmInsertWater').data('formValidation').validate();
+
+    isValid = $('#frmInsertWater').data('formValidation').isValid();
+
+    if (!isValid) {
+        incorrectNote();
+        return;
+    }
+
+    // Confirmar antes de enviar
+    confirmDialogSend('frmInsertWater', () => {
+        // Crear FormData e incluir imágenes seleccionadas
+        const formData = new FormData(document.getElementById('frmInsertWater'));		
+
+		// Agregar imágenes al FormData
+        selectedImages.forEach((image, index) => {
+			console.log(`Agregando imagen ${index}:`, image);  // Verifica el archivo
+			formData.append(`images[${index}]`, image);
+		});
+
+        // Enviar el formulario con fetch
+        fetch('water/insert', {
+            method: 'post',
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert("Datos registrados correctamente.");
+                // Limpiar selección de imágenes
+                selectedImages = [];
+                renderImages();
+            })
+            .catch(error => {
+                console.error("Error al enviar datos:", error);
+                alert("Hubo un error al registrar los datos.");
+            });
+    });
 }

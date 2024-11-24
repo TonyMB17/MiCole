@@ -45,21 +45,26 @@ function searchWater(text, url, event)
 	}
 }
 
-function exportWater(text, url)
+// function exportWater(text, url)
+// {
+// 	var isValid=null;
+
+// 	$('#divSearch').data('formValidation').resetForm();
+// 	$('#divSearch').data('formValidation').validate();
+
+// 	isValid=$('#divSearch').data('formValidation').isValid();
+
+// 	if(!isValid)
+// 	{
+// 		incorrectNote();
+
+// 		return;
+// 	}
+
+// 	window.location.href=url+'?searchParameter='+text;
+// }
+
+function exportWater(url)
 {
-	var isValid=null;
-
-	$('#divSearch').data('formValidation').resetForm();
-	$('#divSearch').data('formValidation').validate();
-
-	isValid=$('#divSearch').data('formValidation').isValid();
-
-	if(!isValid)
-	{
-		incorrectNote();
-
-		return;
-	}
-
-	window.location.href=url+'?searchParameter='+text;
+	window.location.href=url;
 }

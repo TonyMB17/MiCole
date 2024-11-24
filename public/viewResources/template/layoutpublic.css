@@ -35,13 +35,6 @@
 	}
 }
 
-footer > div:nth-child(1)
-{
-	background-color: #4b4b4b;
-	color: #ffffff;
-	padding-top: 25px;
-}
-
 footer > div:nth-child(1) ul
 {
 	display: block;
@@ -54,11 +47,6 @@ footer > div:nth-child(1) ul li
 {
 	margin-bottom: 15px;
 	margin-top: 15px;
-}
-
-footer > div:nth-child(1) ul li a
-{
-	color: #ffffff;
 }
 
 footer > div:nth-child(2)

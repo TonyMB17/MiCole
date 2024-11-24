@@ -42,6 +42,8 @@
 	<link rel="stylesheet" href="{{asset('css/codiTabs.css?x='.config('var.CACHE_LAST_UPDATE'))}}">
 	<link rel="stylesheet" href="{{asset('css/cssAdminLteOverride.css?x='.config('var.CACHE_LAST_UPDATE'))}}">
 
+	@yield('cssSection')
+
 	<script>
 		var _sessionIdUser='{{Session::get('idUser', 'null')}}'=='null' ? null : '{{Session::get('idUser')}}';
 		var _urlBase='{{url('')}}';

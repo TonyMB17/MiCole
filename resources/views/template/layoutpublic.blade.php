@@ -56,6 +56,9 @@
 		var isChrome=!!window.chrome && !!window.chrome.webstore;
 		var isBlink=(isChrome || isOpera) && !!window.CSS;
 	</script>
+
+	@yield('cssSection')
+		
 </head>
 <body>
 	@include('template/parcial/layoutpublic/header')
@@ -65,7 +68,7 @@
 
 	<div id="modalLoading" style="display: none;"><div><div><div></div><div></div><div></div><div></div></div></div></div>
 
-	<!-- @include('template/parcial/layoutpublic/footer') -->
+	@include('template/parcial/layoutpublic/footer')
 
 	<div id="generalDialog"></div>
 

@@ -57,7 +57,7 @@
 				</span>
 			</a>
 			<ul class="treeview-menu">
-				<li id="miWaterModuleGetAll"><a href="{{url('water/getall/1')}}"><i class="fa fa-circle-o"></i> Lista de calidad</a></li>
+				<li id="miWaterModuleGetAll"><a href="{{url('water/getall')}}"><i class="fa fa-circle-o"></i> Lista de calidad</a></li>
 			</ul>
 		</li>
 	@endif

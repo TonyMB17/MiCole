@@ -1,28 +1,52 @@
 @include('home/layout/header')
 <!-- Header Start -->
-<div class="container-fluid bg-primary px-0 px-md-5 mb-5">
+
+<!-- Carrusel de fondo (solo para la página de inicio) -->
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel"
+    style="position: absolute; width: 100%; height: 80vh; z-index: -1; overflow: hidden;">
+    <div class="carousel-inner d-none d-md-block">
+        <div class="carousel-item active">
+            <img src="{{ asset('home/img/about-2.jpeg') }}" class="d-block w-100 h-100" alt="Imagen 1"
+                style="object-fit: cover;">
+        </div>
+        <div class="carousel-item">
+            <img src="{{ asset('home/img/about-4.jpeg') }}" class="d-block w-100 h-100" alt="Imagen 2"
+                style="object-fit: cover;">
+        </div>
+        <div class="carousel-item">
+            <img src="{{ asset('home/img/about-5.jpeg') }}" class="d-block w-100 h-100" alt="Imagen 3"
+                style="object-fit: cover;">
+        </div>
+        <div class="carousel-item">
+            <img src="{{ asset('home/img/about-7.jpg') }}" class="d-block w-100 h-100" alt="Imagen 3"
+                style="object-fit: cover;">
+        </div>
+    </div>
+</div>
+<!-- Contenedor del contenido superpuesto sobre el carrusel -->
+<div class="position-relative text-center px-0 px-md-5 mb-5"
+    style="background: linear-gradient(to right, #09407a, #ffffff00); padding-top: 100px; height: 80vh;">
     <div class="row align-items-center px-3">
-        <div class="col-lg-6 text-center text-lg-left">
-            <img class="img-fluid" style="width: 15rem;" src="{{ asset('home/img/logo_gore2.png') }}" alt="">
-            <h4 class="text-white mb-4 mt-5 mt-lg-0">Gobierno Regional de Apurímac</h4>
-            <h1 class="display-3 font-weight-bold text-white">Sistema Regional de Registro de Cloro</h1>
-            <p class="text-white mb-4">Este es un espacio donde los estudiantes pueden aprender a medir el cloro en el
+        <div class="col-lg-7 text-center text-lg-left">
+            <img class="img-fluid" style="width: 10rem;" src="{{ asset('home/img/logo_gore2.png') }}" alt="Logo">
+            {{-- <h4 class="text-white mb-4 mt-5 mt-lg-0">Gobierno Regional de Apurímac</h4> --}}
+            <h3 class="text-white mb-4 mt-5 mt-lg-0">Estrategia Regional</h3>
+            <h1 class="display-3 font-weight-bold text-white">Mi Cole con Agua Segura</h1>
+            <p class="text-white mb-4 d-none d-md-block">Este es un espacio donde los estudiantes pueden aprender a
+                medir el cloro en el
                 agua de sus escuelas. Con este sistema,
                 podrás hacer tus propias verificaciones y descubrir información divertida y útil sobre el agua.
                 ¡Conviértete en un experto y cuida de tu entorno
                 mientras te diviertes!</p>
-            <a href="{{ route('home.about') }}" class="btn btn-secondary mt-1 py-3 px-5">Conocer más</a>
-        </div>
-        <div class="col-lg-6 text-center text-lg-right">
-            <img class="img-fluid mt-5" src="{{ asset('home/img/img-portal.png') }}" alt="">
+            <a href="{{ route('home.about') }}" class="btn btn-secondary mt-1 py-3 px-5"
+                style="background:#088db6; border: none; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);">Conocer más</a>
         </div>
     </div>
 </div>
 <!-- Header End -->
-
 <style>
     #hover-shadow:hover {
-        box-shadow: 0 4px 30px rgba(255, 255, 0, 0.8);
+        box-shadow: 0 4px 30px rgba(6, 230, 81, 0.8);
     }
 </style>
 <!-- Facilities Start -->
@@ -33,21 +57,21 @@
                 <a href="{{ route('home.content') }}" style="text-decoration: none; color: inherit;">
                     <div id="hover-shadow">
                         <div class="d-flex bg-light shadow-sm border-top rounded mb-4" style="padding: 30px;">
-                            <i class="flaticon-050-fence h1 font-weight-normal text-primary mb-3"></i>
+                            <i class="flaticon-025-sandwich h1 font-weight-normal text-primary mb-3"></i>
                             <div class="pl-4">
-                                <h4>Importancia del Agua</h4>
-                                <p class="m-0">Aqui te contaremos, de manera clara y sencilla, sobre
-                                    la importancia del agua.
+                                <h4>Tensiones en Torno al Agua</h4>
+                                <p class="m-0">Aqui te contaremos, de manera clara y sencilla, sobre las
+                                    tensiones que suelen presentarse en la sociedad en relación con el
+                                    agua.
                                 <ul>
-                                    <li>1. El agua en el Planeta</li>
-                                    <li>2. El ciclo del agua</li>
-                                    <li>3. Su importancia para la infancia</li>
+                                    <li>1. Desperdicio.</li>
+                                    <li>2. La contaminación.</li>
+                                    <li>3. El cambio climático.</li>
                                 </ul>
                                 </p>
                             </div>
                         </div>
                     </div>
-
                 </a>
             </div>
             <div class="col-lg-4 col-md-6 pb-1">
@@ -115,16 +139,15 @@
                 <a href="{{ route('home.content') }}" style="text-decoration: none; color: inherit;">
                     <div id="hover-shadow">
                         <div class="d-flex bg-light shadow-sm border-top rounded mb-4" style="padding: 30px;">
-                            <i class="flaticon-025-sandwich h1 font-weight-normal text-primary mb-3"></i>
+                            <i class="flaticon-047-backpack h1 font-weight-normal text-primary mb-3"></i>
                             <div class="pl-4">
-                                <h4>Tensiones en Torno al Agua</h4>
-                                <p class="m-0">Aqui te contaremos, de manera clara y sencilla, sobre las
-                                    tensiones que suelen presentarse en la sociedad en relación con el
-                                    agua.
+                                <h4>El Uso Responsable del Agua</h4>
+                                <p class="m-0">Aqui te contaremos, de manera clara y sencilla, sobre
+                                    la forma en que debemos tener un uso responsable del agua.
                                 <ul>
-                                    <li>1. Desperdicio.</li>
-                                    <li>2. La contaminación.</li>
-                                    <li>3. El cambio climático.</li>
+                                    <li>1. El ahorro y cuidado del agua.</li>
+                                    <li>2. Deberes y derechos de los usuarios de agua.</li>
+                                    <li>3. Aprendiendo a criar nuestra agua.</li>
                                 </ul>
                                 </p>
                             </div>
@@ -135,16 +158,17 @@
             <div class="col-lg-4 col-md-6 pb-1">
                 <a href="{{ route('home.content') }}" style="text-decoration: none; color: inherit;">
                     <div id="hover-shadow">
-                        <div class="d-flex bg-light shadow-sm border-top rounded mb-4" style="padding: 30px;">
-                            <i class="flaticon-047-backpack h1 font-weight-normal text-primary mb-3"></i>
+                        <div class="d-flex bg-light shadow-sm border-top rounded" style="padding: 30px;">
+                            <i class="flaticon-050-fence h1 font-weight-normal text-primary"></i>
                             <div class="pl-4">
-                                <h4>El Uso Responsable del Agua</h4>
-                                <p class="m-0">Aqui te contaremos, de manera clara y sencilla, sobre
-                                    la forma en que debemos tener un uso responsable del agua.
+                                <h4>Importancia del Agua</h4>
+                                <p class="m-0">Aqui te contaremos, de manera clara y sencilla, sobre que tan
+                                    importante el el agua para el mundo y cada uno de nosotros.</p>
+                                <br>
                                 <ul>
-                                    <li>1. El ahorro y cuidado del agua.</li>
-                                    <li>2. Deberes y derechos de los usuarios de agua.</li>
-                                    <li>3. Aprendiendo a criar nuestra agua.</li>
+                                    <li>1. El agua en el Planeta</li>
+                                    <li>2. El ciclo del agua</li>
+                                    <li>3. Su importancia para la infancia</li>
                                 </ul>
                                 </p>
                             </div>
@@ -319,8 +343,89 @@
 </div>
 <!-- Team End -->
 
+
+<!-- Team Start -->
+<div class="container-fluid pt-5">
+    <div class="container">
+        <div class="text-center pb-2">
+            <p class="section-title px-5"><span class="px-2">Más</span></p>
+            <h1 class="mb-4">Nuestros Miembros</h1>
+        </div>
+        <div class="row text-center mb-4">
+            <a href="https://www.gob.pe/regionapurimac" class="col-md-6 col-lg-3">
+                <div class="bg-light shadow-sm rounded mb-2 p-2 d-flex justify-content-center">
+                    <img class="img-fluid" src="{{ asset('home/img/logo_gore.png') }}"
+                        style="height: 150px; width: auto;" alt="Image">
+                </div>
+                <div>
+                    <h4>Gobierno Regional de Apurímac</h4>
+                </div>
+            </a>
+
+            <a href="https://www.diresaapurimac.gob.pe/web/" class="col-md-6 col-lg-3">
+                <div class="bg-light shadow-sm rounded mb-2 p-2 d-flex justify-content-center">
+                    <img class="img-fluid" src="{{ asset('home/img/logo salud.png') }}"
+                        style="height: 150px; width: auto;" alt="Image">
+                </div>
+                <div>
+                    <h4>DIRESA Apurímac</h4>
+                </div>
+            </a>
+            <a href="https://www.gob.pe/sunass" class="col-md-6 col-lg-3">
+                <div class="bg-light shadow-sm rounded mb-2 p-2 d-flex justify-content-center">
+                    <img class="img-fluid" src="{{ asset('home/img/logo sunas2.jpg') }}"
+                        style="height: 150px; width: auto;" alt="Image">
+                </div>
+                <div>
+                    <h4>SUNASS</h4>
+                </div>
+            </a>
+            <a href="https://www.gob.pe/regionapurimac-dre" class="col-md-6 col-lg-3">
+                <div class="bg-light shadow-sm rounded mb-2 p-2 d-flex justify-content-center">
+                    <img class="img-fluid" src="{{ asset('home/img/drea-apurimac.png') }}"
+                        style="height: 150px; width: auto;" alt="Image">
+                </div>
+                <div>
+                    <h4>DRE Apurímac</h4>
+                </div>
+            </a>
+        </div>
+
+        <div class="row text-center mb-4">
+            <a href="https://drvcs.regionapurimac.gob.pe/" class="col-md-6 col-lg-3">
+                <div class="bg-light shadow-sm rounded mb-2 p-2 d-flex justify-content-center">
+                    <img class="img-fluid" src="{{ asset('home/img/logo_vivienda.jpg') }}"
+                        style="height: 150px; width: auto;" alt="Image">
+                </div>
+                <div>
+                    <h4>Direccion Regional de Vivienda y Saneamiento</h4>
+                </div>
+            </a>
+            <a href="https://www.midis.gob.pe/fed/sobre-el-fed/el-fed" class="col-md-6 col-lg-3">
+                <div class="bg-light shadow-sm rounded mb-2 p-2 d-flex justify-content-center">
+                    <img class="img-fluid" src="{{ asset('home/img/FED.jpg') }}" style="height: 150px; width: auto;"
+                        alt="Image">
+                </div>
+                <div>
+                    <h4>Fondo de Estimulo al Desempeño y Logro de Resultados Sociales</h4>
+                </div>
+            </a>
+            <a href="https://emusapabancay.com.pe/" class="col-md-6 col-lg-3">
+                <div class="bg-light shadow-sm rounded mb-2 p-2 d-flex justify-content-center">
+                    <img class="img-fluid" src="{{ asset('home/img/emusap2.jpg') }}"
+                        style="height: 150px; width: auto;" alt="Image">
+                </div>
+                <div>
+                    <h4>EMUSAP Abancay</h4>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<!-- Team End -->
+
 <!-- Testimonial Start -->
-<div class="container-fluid py-5">
+{{-- <div class="container-fluid py-5">
     <div class="container p-0">
         <div class="text-center pb-2">
             <p class="section-title px-5"><span class="px-2">Saber Mas</span></p>
@@ -353,46 +458,10 @@
                     <img class="img-fluid" src="{{ asset('home/img/drea-apurimac.png') }}"
                         style="height: 150px; width: auto;" alt="Image">
                 </div>
-            </div>
-            <div class="testimonial-item px-3 text-center">
-                <div style="height: 5rem">
-                    <h4>Direccion de Vivienda y Saneamiento</h4>
-                </div>
-                <div class="bg-light shadow-sm rounded mb-2 p-2 d-flex justify-content-center">
-                    <img class="img-fluid" src="{{ asset('home/img/logo_vivienda.jpg') }}"
-                        style="height: 150px; width: auto;" alt="Image">
-                </div>
-            </div>
-            <div class="testimonial-item px-3 text-center">
-                <div style="height: 5rem">
-                    <h4>Superintendencia Nacional de Servicios de Saneamiento</h4>
-                </div>
-                <div class="bg-light shadow-sm rounded mb-2 p-2 d-flex justify-content-center">
-                    <img class="img-fluid" src="{{ asset('home/img/logo sunas.jpg') }}"
-                        style="height: 150px; width: auto;" alt="Image">
-                </div>
-            </div>
-            <div class="testimonial-item px-3 text-center">
-                <div style="height: 5rem">
-                    <h4>Fondo de Estimulo al Desempeño y Logro de Resultados Sociales</h4>
-                </div>
-                <div class="bg-light shadow-sm rounded mb-2 p-2 d-flex justify-content-center">
-                    <img class="img-fluid" src="{{ asset('home/img/FED.jpg') }}" style="height: 150px; width: auto;"
-                        alt="Image">
-                </div>
-            </div>
-            <div class="testimonial-item px-3 text-center">
-                <div style="height: 5rem">
-                    <h5>Empresa Municipal de Servicio de Abastecimiento de Agua Potable y Alcantarillado de Abancay</h5>
-                </div>
-                <div class="bg-light shadow-sm rounded mb-2 p-2 d-flex justify-content-center">
-                    <img class="img-fluid" src="{{ asset('home/img/emusap.jpg') }}"
-                        style="height: 150px; width: auto;" alt="Image">
-                </div>
-            </div>
+            </div>            
         </div>
     </div>
-</div>
+</div> --}}
 <!-- Testimonial End -->
 
 @include('home/layout/footer')
