@@ -6,19 +6,19 @@
     style="position: absolute; width: 100%; height: 80vh; z-index: -1; overflow: hidden;">
     <div class="carousel-inner d-none d-md-block">
         <div class="carousel-item active">
-            <img src="{{ asset('home/img/about-2.jpeg') }}" class="d-block w-100 h-100" alt="Imagen 1"
+            <img src="{{ asset('home/img/galery/13.jpeg') }}" class="d-block w-100 h-100" alt="Imagen 1"
                 style="object-fit: cover;">
         </div>
         <div class="carousel-item">
-            <img src="{{ asset('home/img/about-4.jpeg') }}" class="d-block w-100 h-100" alt="Imagen 2"
+            <img src="{{ asset('home/img/galery/18.jpeg') }}" class="d-block w-100 h-100" alt="Imagen 2"
                 style="object-fit: cover;">
         </div>
         <div class="carousel-item">
-            <img src="{{ asset('home/img/about-5.jpeg') }}" class="d-block w-100 h-100" alt="Imagen 3"
+            <img src="{{ asset('home/img/galery/8.jpeg') }}" class="d-block w-100 h-100" alt="Imagen 3"
                 style="object-fit: cover;">
         </div>
         <div class="carousel-item">
-            <img src="{{ asset('home/img/about-7.jpg') }}" class="d-block w-100 h-100" alt="Imagen 3"
+            <img src="{{ asset('home/img/galery/25.jpeg') }}" class="d-block w-100 h-100" alt="Imagen 3"
                 style="object-fit: cover;">
         </div>
     </div>
