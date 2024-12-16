@@ -11,9 +11,8 @@ use App\Http\Controllers\WaterController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\InstitutionController;
 
-// Redirigir la ruta raíz a 'index/home'
 Route::get('/', function () {
-    return redirect()->route('home.index'); // Redirige a la ruta nombrada 'home.index'
+    return redirect()->route('home.index');
 })->name('home');
 
 Route::get('index/home', [IndexController::class, 'actionIndex'])->name('home.index');

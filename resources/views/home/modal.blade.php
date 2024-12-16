@@ -52,8 +52,7 @@
 
 <style>
     .modal .modal-body {
-        background: linear-gradient(#ffffff, #31adff);
-        /* Degradado horizontal */
+        background: linear-gradient(#ffffff, #31adff);        
     }
 
     .modal .card-container {
@@ -81,12 +80,12 @@
         text-align: center;
     }
 
-    .modal .card-modal:hover {
+    .modal .card:hover {
         transform: scale(1.05);
         /* Aumenta el tamaño al pasar el cursor */
     }
 
-    .modal .card-modal img {
+    .modal .card img {
         height: 300px;
         object-fit: cover;
         /* Asegura que la imagen se ajuste correctamente */
