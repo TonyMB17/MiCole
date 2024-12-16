@@ -1,4 +1,8 @@
 @include('home/layout/header')
+
+@if ($modal)
+    @include('home.modal')
+@endif
 <!-- Header Start -->
 
 <!-- Carrusel de fondo (solo para la página de inicio) -->
@@ -277,7 +281,7 @@
 <!-- Class End -->
 
 <!-- Team Start -->
-<div class="container-fluid pt-5">
+<div class="container-fluid pt-5" id="materiales">
     <div class="container">
         <div class="text-center pb-2">
             <p class="section-title px-5"><span class="px-2">Extras</span></p>
@@ -337,6 +341,46 @@
                 </div>
                 <h4>Aprendiendo a Valorar y Criar Nuestra Agua</h4>
                 <i>Albun Intercativo</i>
+            </div>
+
+            <div class="col-md-6 col-lg-3 text-center team mb-5">
+                <div class="position-relative overflow-hidden mb-4" style="border-radius: 100%;">
+                    <img style="height: 15rem" class="img-fluid w-100" src="{{ asset('home/material agua/ANEXOS/rojer.png') }}"
+                        alt="">
+                    <div
+                        class="team-social d-flex align-items-center justify-content-center w-100 h-100 position-absolute">
+                        <a class="btn btn-outline-light text-center mr-2 px-0" style="width: 38px; height: 38px;"
+                            href="{{ asset('home/material agua/ANEXOS/Roger y la Magia del Agua.pdf') }}" target="_blank"><i class="fas fa-eye"></i></a>
+                    </div>
+                </div>
+                <h4>Roger y la magia del agua.</h4>
+                <i>Cuento</i>
+            </div>
+            <div class="col-md-6 col-lg-3 text-center team mb-5">
+                <div class="position-relative overflow-hidden mb-4" style="border-radius: 100%;">
+                    <img style="height: 15rem" class="img-fluid w-100" src="{{ asset('home/material agua/ANEXOS/micole.png') }}"
+                        alt="">
+                    <div
+                        class="team-social d-flex align-items-center justify-content-center w-100 h-100 position-absolute">
+                        <a class="btn btn-outline-light text-center mr-2 px-0" style="width: 38px; height: 38px;"
+                            href="{{ asset('home/material agua/ANEXOS/Mi Cole Con Agua Segura.pdf') }}" target="_blsnk"><i class="fas fa-eye"></i></a>
+                    </div>
+                </div>
+                <h4>Mi cole con Agua Segura.</h4>
+                <i>Estrategia </i>
+            </div>
+            <div class="col-md-6 col-lg-3 text-center team mb-5">
+                <div class="position-relative overflow-hidden mb-4" style="border-radius: 100%;">
+                    <img style="height: 15rem" class="img-fluid w-100" src="{{ asset('home/material agua/ANEXOS/guardianes.png') }}"
+                        alt="">
+                    <div
+                        class="team-social d-flex align-items-center justify-content-center w-100 h-100 position-absolute">
+                        <a class="btn btn-outline-light text-center mr-2 px-0" style="width: 38px; height: 38px;"
+                            href="{{ asset('home/material agua/ANEXOS/Los Guardianes del Agua.pdf') }}" target="_blank"><i class="fas fa-eye"></i></a>
+                    </div>
+                </div>
+                <h4>Los Guardianes del Agua.</h4>
+                <i>Cuento</i>
             </div>
         </div>
     </div>

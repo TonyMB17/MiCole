@@ -8,12 +8,23 @@ use App\Models\TContent;
 use App\Models\TGallery;
 use App\Models\TUser;
 use Illuminate\Support\Carbon;
+use App\Models\ModalSetting;
+use Illuminate\Support\Facades\Cache;
 
 class IndexController extends Controller
 {
 	public function actionIndex()
-	{
-		return view('home/index');
+	{	
+
+		$modal = Cache::remember('active_modal', 60, function () {
+			return ModalSetting::where('is_active', true)
+				->where('start_date', '<=', now())
+				->where('end_date', '>=', now())
+				->first();
+		});
+
+		// Retorna la vista con los datos del modal
+		return view('home.index', compact('modal'));
 	}
 
 	public function actionGallery()
@@ -36,7 +47,7 @@ class IndexController extends Controller
 	public function actioncontentDetail($id)
 	{
 		$content = TContent::where('id', $id)->first();
-		$video = TVideo::where('id', $id)->first();		
+		$video = TVideo::where('id', $id)->first();
 		return view('home/content_detail', ['content' => $content, 'video' => $video]);
 	}
 
