@@ -577,22 +577,19 @@ class WaterController extends Controller
 			];
 		}
 
-		// Reemplazar los datos con los valores reales y solo mantener los últimos 6 meses
+		// Reemplazar los datos con los valores reales
+		$sixMonthsAgo = now()->subMonths(5)->startOfMonth();
 		foreach ($data as $record) {
-			// Extraer mes y año del campo updated_at
-			$recordMonth = \Carbon\Carbon::parse($record->updated_at)->format('m'); // Mes en formato 01-12
-			$recordYear = \Carbon\Carbon::parse($record->updated_at)->format('Y'); // Año (4 dígitos)
-
-			// Verificar si el mes y año de la fecha están dentro de los últimos 6 meses
-			if (($recordYear == $currentYear && $recordMonth >= $currentMonth - 5) || $recordYear == $currentYear) {
-				$month = $months[(int)$recordMonth - 1]; // Mapeo de número de mes a nombre en español
+			$recordDate = \Carbon\Carbon::parse($record->updated_at);
+			if ($recordDate->gte($sixMonthsAgo)) {
+				$month = $months[(int)$recordDate->format('m') - 1];
 
 				$formattedData[$month] = [
-					'resultW1' => $record->resultW1 < 0 ? 0 : $record->resultW1,
-					'resultW2' => $record->resultW2 < 0 ? 0 : $record->resultW2,
-					'resultW3' => $record->resultW3 < 0 ? 0 : $record->resultW3,
-					'resultW4' => $record->resultW4 < 0 ? 0 : $record->resultW4,
-					'resultW5' => $record->resultW5 < 0 ? 0 : $record->resultW5,
+					'resultW1' => max(0, $record->resultW1),
+					'resultW2' => max(0, $record->resultW2),
+					'resultW3' => max(0, $record->resultW3),
+					'resultW4' => max(0, $record->resultW4),
+					'resultW5' => max(0, $record->resultW5),
 				];
 			}
 		}
@@ -601,13 +598,9 @@ class WaterController extends Controller
 		$last6Months = [];
 		$chartLabels = [];
 		for ($i = 5; $i >= 0; $i--) {
-			$date = now()->subMonths($i); // Fecha correspondiente
-			$monthLabel = $date->format('F'); // Nombre del mes en inglés
-			$monthLabelSpanish = $this->getSpanishMonth($monthLabel); // Convertir al español
-			$year = $date->format('Y'); // Año correspondiente
-
-			// Concatenar el mes en español con el año
-			$formattedLabel = "{$monthLabelSpanish} {$year}";
+			$date = now()->subMonths($i);
+			$monthLabelSpanish = $this->getSpanishMonth($date->format('F'));
+			$formattedLabel = "{$monthLabelSpanish} {$date->format('Y')}";
 
 			$last6Months[$formattedLabel] = $formattedData[$monthLabelSpanish] ?? [
 				'resultW1' => 0,
@@ -620,7 +613,6 @@ class WaterController extends Controller
 			$chartLabels[] = $formattedLabel;
 		}
 
-		// Preparar los datos para Chart.js
 		$chartData = [
 			'resultW1' => array_column($last6Months, 'resultW1'),
 			'resultW2' => array_column($last6Months, 'resultW2'),
@@ -645,13 +637,12 @@ class WaterController extends Controller
 			->get();
 
 		$formattedImages = $images->map(function ($image) {
-			$formattedDate = (new DateTime($image->created_at))->format('d F Y'); // Formato en inglés
-			$spanishMonth = $this->getSpanishMonth(date('F', strtotime($image->created_at))); // Traducción
+			$formattedDate = (new DateTime($image->created_at))->format('d F Y');
+			$spanishMonth = $this->getSpanishMonth(date('F', strtotime($image->created_at)));
 			$image->formatted_date = str_replace(date('F', strtotime($image->created_at)), $spanishMonth, $formattedDate);
-
 			return $image;
 		});
-		// Retornar los datos a la vista
+//dd($formattedImages);
 		return view('water.detail', compact('chartLabels', 'chartData', 'institution', 'formattedImages'));
 	}
 

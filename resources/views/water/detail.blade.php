@@ -78,26 +78,47 @@
                     <div class="row">
                         <div class="col-md-4">
                             <h4 class="box-title" style="font-style: italic; font-weight: bold;">
-                                {{ $image->formatted_date }}</h4>
+                                {{ $image->formatted_date }}
+                            </h4>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-12 col-md-4 mb-3">
-                            <a href="{{ asset($image->urlImage1) }}" data-lightbox="gallery">
-                                <img src="{{ asset($image->urlImage1) }}" class="img-fluid image-gallery" alt="Imagen 1">
-                            </a>
+
+                    @if (empty($image->urlImage1) && empty($image->urlImage2) && empty($image->urlImage3))
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="text-muted">No se subió ninguna imagen</p>
+                            </div>
                         </div>
-                        <div class="col-12 col-md-4 mb-3">
-                            <a href="{{ asset($image->urlImage2) }}" data-lightbox="gallery">
-                                <img src="{{ asset($image->urlImage2) }}" class="img-fluid image-gallery" alt="Imagen 2">
-                            </a>
+                    @else
+                        <div class="row">
+                            @if (!empty($image->urlImage1))
+                                <div class="col-12 col-md-4 mb-3">
+                                    <a href="{{ asset($image->urlImage1) }}" data-lightbox="gallery">
+                                        <img src="{{ asset($image->urlImage1) }}" class="img-fluid image-gallery"
+                                            alt="Imagen 1">
+                                    </a>
+                                </div>
+                            @endif
+
+                            @if (!empty($image->urlImage2))
+                                <div class="col-12 col-md-4 mb-3">
+                                    <a href="{{ asset($image->urlImage2) }}" data-lightbox="gallery">
+                                        <img src="{{ asset($image->urlImage2) }}" class="img-fluid image-gallery"
+                                            alt="Imagen 2">
+                                    </a>
+                                </div>
+                            @endif
+
+                            @if (!empty($image->urlImage3))
+                                <div class="col-12 col-md-4 mb-3">
+                                    <a href="{{ asset($image->urlImage3) }}" data-lightbox="gallery">
+                                        <img src="{{ asset($image->urlImage3) }}" class="img-fluid image-gallery"
+                                            alt="Imagen 3">
+                                    </a>
+                                </div>
+                            @endif
                         </div>
-                        <div class="col-12 col-md-4 mb-3">
-                            <a href="{{ asset($image->urlImage3) }}" data-lightbox="gallery">
-                                <img src="{{ asset($image->urlImage3) }}" class="img-fluid image-gallery" alt="Imagen 3">
-                            </a>
-                        </div>
-                    </div>
+                    @endif
                 @endforeach
             </div>
         </div>
