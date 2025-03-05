@@ -27,6 +27,8 @@ Route::get('index/home/content_detail/{id}', [IndexController::class, 'actioncon
 
 Route::get('index/home/gallery', [IndexController::class, 'actionGallery'])->name('home.gallery');
 
+Route::get('index/home/institution', [IndexController::class, 'actionInstitution'])->name('home.institution');
+
 Route::get('/get-districts', [UserController::class, 'getDistrictsByProvince'])->name('getDistricts');
 
 //Route::get('', [IndexController::class, 'actionIndex'])->middleware('GenericMiddleware:index/index');

@@ -7,6 +7,7 @@ use App\Models\TVideo;
 use App\Models\TContent;
 use App\Models\TGallery;
 use App\Models\TUser;
+use App\Models\TProvince;
 use Illuminate\Support\Carbon;
 use App\Models\ModalSetting;
 use Illuminate\Support\Facades\Cache;
@@ -50,6 +51,19 @@ class IndexController extends Controller
 		$video = TVideo::where('id', $id)->first();
 		return view('home/content_detail', ['content' => $content, 'video' => $video]);
 	}
+
+	public function actionInstitution()
+	{
+		$provinces = TProvince::with(['tDistrict.tInstitution'])->get();	
+		
+		$totalInstitutions = $provinces->sum(function ($province) {
+			return $province->tDistrict->sum(function ($district) {
+				return $district->tInstitution->count();
+			});
+		});
+	
+		return view('home.institution', compact('provinces', 'totalInstitutions'));
+	}	
 
 	public function actionIndexAdmin()
 	{
