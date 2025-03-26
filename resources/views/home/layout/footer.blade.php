@@ -67,7 +67,7 @@
                &copy; <a class="text-primary font-weight-bold" href="#">Gobierno Regional de Apurímac 2024</a>.
                Todos los derechos reservados. Designed
                by
-               <a class="text-primary font-weight-bold" href="">Desarrollo Social</a>
+               <a class="text-primary font-weight-bold" href="www.linkedin.com/in/anthony-meza-bautista-48801a323">Desarrollo Social - AMB</a>
            </p>
        </div>
    </div>
