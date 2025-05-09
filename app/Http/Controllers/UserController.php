@@ -12,6 +12,7 @@ use App\Validation\UserValidation;
 
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 use App\Models\TUser;
 use App\Models\TProvince;
@@ -59,7 +60,7 @@ class UserController extends Controller
 			$tUser = TUser::with(['tinstitutiontuser'])->whereRaw('email=?', [trim($request->input('txtEmail'))])->first();
 
 			if ($tUser != null && $tUser->status == 'Activo') {
-				if ($encrypter->decrypt($tUser->password) === $request->input('passPassword')) {
+				if (Hash::check($request->input('passPassword'), $tUser->password)) {
 					if (count($tUser->tinstitutiontuser) == 0 && strpos($tUser->role, 'Súper usuario') === false && strpos($tUser->role, 'Administrador') === false && strpos($tUser->role, 'Supervisor') === false) {
 						return PlatformHelper::redirectError(['Su usuario aún no fue asignado a ninguna institución.'], 'user/loginasadmin');
 					}
@@ -207,7 +208,7 @@ class UserController extends Controller
 				$tUser->idProvince = !empty(trim($request->input('selectProvince'))) ? trim($request->input('selectProvince')) : null;
 				$tUser->idDistrict = !empty(trim($request->input('selectDistrict'))) ? trim($request->input('selectDistrict')) : null;
 
-				dd($tUser);
+				//dd($tUser);
 
 				$tUser->save();
 
