@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Helper\PlatformHelper;
 use Illuminate\Http\Request;
 use Illuminate\Session\SessionManager;
-use Illuminate\Encryption\Encrypter;
 
 use App\Validation\UserValidation;
 
@@ -20,14 +19,14 @@ use App\Models\TDistrict;
 
 class UserController extends Controller
 {
-	public function actionLogIn(Request $request, SessionManager $sessionManager, Encrypter $encrypter)
+	public function actionLogIn(Request $request, SessionManager $sessionManager)
 	{
 		$sessionManager->flush();
 
 		$tUser = TUser::whereRaw('email=?', [trim($request->input('txtEmailLogInLayout'))])->first();
 
 		if ($tUser != null && $tUser->status == 'Activo') {
-			if ($encrypter->decrypt($tUser->password) === $request->input('passPasswordLogInLayout')) {
+			if (Hash::check($request->input('passPasswordLogInLayout'), $tUser->password)) {
 				$sessionManager->put('idUser', $tUser->idUser);
 				$sessionManager->put('email', $tUser->email);
 				$sessionManager->put('firstName', $tUser->firstName);
@@ -52,7 +51,7 @@ class UserController extends Controller
 		return PlatformHelper::redirectError(['Usuario o contraseña incorrecto o no has confirmado tu registro.'], '/');
 	}
 
-	public function actionLogInAsAdmin(Request $request, SessionManager $sessionManager, Encrypter $encrypter)
+	public function actionLogInAsAdmin(Request $request, SessionManager $sessionManager)
 	{
 		if ($_POST) {
 			$sessionManager->flush();
@@ -117,7 +116,7 @@ class UserController extends Controller
 		return PlatformHelper::redirectCorrect(['Sesión cerrada correctamente.'], 'user/loginasadmin');
 	}
 
-	public function actionInsert(Request $request, Encrypter $encrypter)
+	public function actionInsert(Request $request)
 	{
 		try {
 			DB::beginTransaction();
@@ -136,7 +135,7 @@ class UserController extends Controller
 			$tUser->firstName = trim($request->input('txtFirstNameRegisterLayout'));
 			$tUser->surName = trim($request->input('txtSurNameRegisterLayout'));
 			$tUser->email = trim($request->input('txtEmailRegisterLayout'));
-			$tUser->password = $encrypter->encrypt($request->input('passPasswordRegisterLayout'));
+			$tUser->password = Hash::make($request->input('passPasswordRegisterLayout'));
 			$tUser->avatarExtension = 'png';
 			$tUser->confirmCode = PlatformHelper::randomString(20);
 			$tUser->recoveryCode = '';
@@ -172,7 +171,7 @@ class UserController extends Controller
 		}
 	}
 
-	public function actionInsertAsAdmin(Request $request, Encrypter $encrypter)
+	public function actionInsertAsAdmin(Request $request)
 	{
 		if ($_POST) {
 			try {
@@ -192,7 +191,7 @@ class UserController extends Controller
 				$tUser->firstName = trim($request->input('txtFirstName'));
 				$tUser->surName = trim($request->input('txtSurName'));
 				$tUser->email = trim($request->input('txtEmail'));
-				$tUser->password = $encrypter->encrypt($request->input('passPassword'));
+				$tUser->password = Hash::make($request->input('passPassword'));
 				$tUser->avatarExtension = 'png';
 				$tUser->confirmCode = '';
 				$tUser->recoveryCode = '';
@@ -264,7 +263,7 @@ class UserController extends Controller
 		}
 	}
 
-	public function actionRecoveryPassword(Request $request, Encrypter $encrypter)
+	public function actionRecoveryPassword(Request $request)
 	{
 		if ($_POST) {
 			try {
@@ -284,7 +283,7 @@ class UserController extends Controller
 					return PlatformHelper::redirectError($this->_so->mo->listMessage, 'user/recoverypassword');
 				}
 
-				$tUser->password = $encrypter->encrypt($request->input('passPassword'));
+				$tUser->password = Hash::make($request->input('passPassword'));
 				$tUser->recoveryCode = '';
 				$tUser->recoveryExpirationDate = date('Y-m-d H:i:s');
 
@@ -336,7 +335,7 @@ class UserController extends Controller
 		}
 	}
 
-	public function actionChangeEmail(Request $request, SessionManager $sessionManager, Encrypter $encrypter)
+	public function actionChangeEmail(Request $request, SessionManager $sessionManager)
 	{
 		try {
 			$tUser = TUser::whereRaw('email=?', [$request->input('txtEmailForChangeEmail')])->first();
@@ -347,7 +346,7 @@ class UserController extends Controller
 
 			$tUser = TUser::find($sessionManager->get('idUser'));
 
-			if ($encrypter->decrypt($tUser->password) != $request->input('passPasswordForChangeEmail')) {
+			if (!Hash::check($request->input('passPasswordForChangeEmail'), $tUser->password)) {
 				return PlatformHelper::redirectError(['La contraseña ingresada es incorrecta.'], 'user/edit');
 			}
 
@@ -434,7 +433,7 @@ class UserController extends Controller
 		return view('user/edit', ['tUser' => $tUser]);
 	}
 
-	public function actionEditAsAdmin(Request $request, SessionManager $sessionManager, Encrypter $encrypter, $idUser = null)
+	public function actionEditAsAdmin(Request $request, SessionManager $sessionManager, $idUser = null)
 	{
 		if ($_POST) {
 			try {
@@ -461,7 +460,7 @@ class UserController extends Controller
 				$tUser->email = trim($request->input('txtEmail'));
 
 				if (trim($request->input('txtPassword')) != '') {
-					$tUser->password = $encrypter->encrypt($request->input('txtPassword'));
+					$tUser->password = Hash::make($request->input('txtPassword'));
 				}
 
 				$tUser->role = (($request->input('selectRole') != null && $request->input('selectRole') != '') ? implode(',', $request->input('selectRole')) : '');
@@ -552,17 +551,18 @@ class UserController extends Controller
 		}
 	}
 
-	public function actionChangePassword(Request $request, SessionManager $sessionManager, Encrypter $encrypter)
+	public function actionChangePassword(Request $request, SessionManager $sessionManager)
 	{
 		try {
 			$tUser = TUser::find($sessionManager->get('idUser'));
 
-			if ($encrypter->decrypt($tUser->password) !== $request->input('passPassword')) {
+			// Verificar la contraseña actual
+			if (!Hash::check($request->input('passPassword'), $tUser->password)) {
 				return PlatformHelper::redirectError(['La contraseña actual es incorrecta.'], 'user/edit');
 			}
 
-			$tUser->password = $encrypter->encrypt($request->input('passPasswordNew'));
-
+			// Guardar la nueva contraseña hasheada
+			$tUser->password = Hash::make($request->input('passPasswordNew'));
 			$tUser->save();
 
 			return PlatformHelper::redirectCorrect(['Contraseña cambiada correctamente.'], 'user/edit');
